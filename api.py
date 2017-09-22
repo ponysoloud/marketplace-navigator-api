@@ -100,10 +100,11 @@ def page_set_shop():
 
 	data = json.loads(request.data)
 	shopid = data['shopId']
+	name = data['name']
 	longitude = data['longitude']
 	latitude = data['latitude']
 
-	return jsonify(apilib.set_user_shop(token, shopid, longitude, latitude))
+	return jsonify(apilib.set_user_shop(token, shopid, name, longitude, latitude))
 
 @app.route('/setAccountShopItem', methods=['POST'])
 def page_set_shop_item():
@@ -117,6 +118,7 @@ def page_set_shop_item():
 		print('No file part')
 		return jsonify({ 'error': 'Not found \'image\' argument'})
 
+	print("step@1")
 	file = request.files['image']
 
 	if file.filename == '':
@@ -125,9 +127,12 @@ def page_set_shop_item():
 	if not (file and allowed_file(file.filename)):
 		return jsonify({ 'error': 'Invalid file'})
 
+	print("step@2")
 	f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+	print("step@3")
 	file.save(f)	
 
+	print("step@4")
 	#get data arguments
 	data = request.form
 	shopid = data['shopId']

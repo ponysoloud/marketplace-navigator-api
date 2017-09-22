@@ -103,8 +103,8 @@ def set_user_info(idToken, name, imagepath):
 
 	return { 'userId': uid, 'user': user.val() }
 
-def set_user_shop(idToken, shopid, lon, lat):
-	if not (check_if_string([idToken, shopId]) and check_if_double([lon, lat])):
+def set_user_shop(idToken, shopid, name, lon, lat):
+	if not (check_if_string([idToken, shopId, name]) and check_if_double([lon, lat])):
 		return { 'error': 'Invalid argument'}
 
 	uid = get_uid(idToken)
@@ -113,7 +113,7 @@ def set_user_shop(idToken, shopid, lon, lat):
 
 	res = db.child("users").child("sellers").get(idToken)
 	if uid in res.val():
-		db.child("users").child("sellers").child(uid).child("shops").update({ shopid: { "location" : { "longitude": lon, "latitude": lat } } }, idToken)
+		db.child("users").child("sellers").child(uid).child("shops").update({ shopid: { "location" : { "longitude": lon, "latitude": lat }, "name" : name } }, idToken)
 		shop = db.child("users").child("sellers").child(uid).child("shops").child(shopid).get(idToken)
 
 		return { 'shopId': shopid, 'shop': shop.val() }
@@ -128,6 +128,7 @@ def set_user_shop_item(idToken, shopid, itemId, name, category, gender, price, i
 	if uid == None:
 		return { 'error' : 'Invalid token' }
 
+	print("step#1")
 	res = db.child("users").child("sellers").get(idToken)
 	if uid in res.val():
 		res2 = db.child("users").child("sellers").child(uid).child("shops").get(idToken)
@@ -155,9 +156,12 @@ def set_user_shop_item(idToken, shopid, itemId, name, category, gender, price, i
 				#set new info
 				gid = db.generate_key()
 
+				print("step#2")
 				#upload file
 				stimagepath = UPLOAD_FOLDER + str(gid) + imagepath.rsplit('.', 1)[1].lower()
+				print("step#3")
 				storage.child(stimagepath).put(imagepath, idToken)
+				print("step#4")
 				path = storage.child(stimagepath).get_url()
 
 				db.child("users").child("sellers").child(uid).child("shops").child(shopid).child("goods").update({ itemId: { 
@@ -197,7 +201,6 @@ def check_if_category(param):
 
 def check_if_string(param):
 	for i in param:
-		print(i)
 		if not isinstance(i, str):
 			return False
 	return True

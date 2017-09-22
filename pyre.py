@@ -385,14 +385,18 @@ class Storage:
         # reset path
         path = self.path
         self.path = None
+        print("pyre@1")
         if isinstance(file, str):
             file_object = open(file, 'rb')
         else:
             file_object = file
         request_ref = self.storage_bucket + "/o?name={0}".format(path)
+        print("pyre@2")
         if token:
             headers = {"Authorization": "Firebase " + token}
+            print("pyre@3")
             request_object = self.requests.post(request_ref, headers=headers, data=file_object)
+            print("pyre@4")
             raise_detailed_error(request_object)
             return request_object.json()
         elif self.credentials:
