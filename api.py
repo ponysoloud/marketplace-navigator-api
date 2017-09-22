@@ -68,6 +68,9 @@ def page_set_info():
 
 	token = request.args['token']
 
+	if not os.path.exists(UPLOAD_FOLDER):
+		os.makedirs(UPLOAD_FOLDER)
+
 	#upload file
 	if 'image' not in request.files:
 		print('No file part')
@@ -118,6 +121,9 @@ def page_set_shop_item():
 		print('No file part')
 		return jsonify({ 'error': 'Not found \'image\' argument'})
 
+	if not os.path.exists(UPLOAD_FOLDER):
+		os.makedirs(UPLOAD_FOLDER)
+
 	print("step@1")
 	file = request.files['image']
 
@@ -144,6 +150,9 @@ def page_set_shop_item():
 
 	return jsonify(apilib.set_user_shop_item(token, shopid, itemid, name, category, gender, price, f))
 
+if __name__ == "__main__":
+	port = int(os.environ.get("PORT", 5000))
+	app.run(host='0.0.0.0', port=port)
 
 """
 @app.route('/addimg', methods=['POST'])
