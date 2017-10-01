@@ -104,7 +104,7 @@ def set_user_info(idToken, name, imagepath):
 	return { 'userId': uid, 'user': user.val() }
 
 def set_user_shop(idToken, shopid, name, lon, lat):
-	if not (check_if_string([idToken, shopId, name]) and check_if_double([lon, lat])):
+	if not (check_if_string([idToken, shopid, name]) and check_if_double([lon, lat])):
 		return { 'error': 'Invalid argument'}
 
 	uid = get_uid(idToken)
