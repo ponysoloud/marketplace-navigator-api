@@ -69,7 +69,7 @@ def page_set_info():
 	token = request.args['token']
 
 	if not os.path.exists(UPLOAD_FOLDER):
-		os.makedirs(UPLOAD_FOLDER)ts
+		os.makedirs(UPLOAD_FOLDER)
 
 	#upload file
 	if 'image' not in request.files:
